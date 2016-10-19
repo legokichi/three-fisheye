@@ -3,9 +3,9 @@
 ./dist
 
 [include]
-
+./src/index.js
 
 [libs]
-./src_typed/decls
+./src/decls
 
 [options]
