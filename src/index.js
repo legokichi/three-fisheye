@@ -226,8 +226,8 @@ export function _main(){
   container.appendChild(renderer.domElement);
 
   // 素材ロード
-  // const src = "2016-10-18-123734.jpg"; // ino
-  const src = "2016-10-18-16.29.01.png"; // shi3z
+  // const src = "2016-10-18-123734.jpg";
+  const src = "2016-10-18-16.29.01.png";
   const webm = "2016-10-18-123529.webm";
   Promise.all([
     // カメラをひとつ選択

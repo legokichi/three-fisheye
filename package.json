@@ -1,12 +1,12 @@
 {
-  "name": "fisheye2panorama",
+  "name": "three-fisheye",
   "version": "0.0.1",
   "scripts": {
     "setup": "npm install -g http-server; mkdir dist src",
     "init": "npm run update; npm run build",
     "update": "npm update",
-    "build": "npm run clean && browserify src/index.js --standalone Fisheye2Panorama -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify",
-    "start": "http-server -s &   watchify src/index.js --standalone Fisheye2Panorama -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify -v",
+    "build": "npm run clean && browserify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify",
+    "start": "http-server -s &   watchify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify -v",
     "stop": "killall -- node",
     "check": "flow check",
     "lint": "eslint ./src",
