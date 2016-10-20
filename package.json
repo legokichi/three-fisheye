@@ -1,16 +1,16 @@
 {
-  "name": "unnamed",
+  "name": "fisheye2panorama",
   "version": "0.0.1",
   "scripts": {
-    "setup": "npm install -g http-server; mkdir dist src lib",
+    "setup": "npm install -g http-server; mkdir dist src",
     "init": "npm run update; npm run build",
     "update": "npm update",
-    "build": "npm run clean && browserify src/index.js --standalone Main -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify",
-    "start": "http-server -s &   watchify src/index.js --standalone Main -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify -v",
+    "build": "npm run clean && browserify src/index.js --standalone Fisheye2Panorama -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify",
+    "start": "http-server -s &   watchify src/index.js --standalone Fisheye2Panorama -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify -v",
     "stop": "killall -- node",
     "check": "flow check",
     "lint": "eslint ./src",
-    "clean": "rm -rf lib/* dist/*",
+    "clean": "rm -rf dist/*",
     "reset": "rm -rf node_modules"
   },
   "devDependencies": {
@@ -30,5 +30,6 @@
     "three": "^0.81.2",
     "three-orbitcontrols": "^1.1.2",
     "three-trackballcontrols": "0.0.5"
-  }
+  },
+  "main": "src/index.js"
 }
