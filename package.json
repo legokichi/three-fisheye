@@ -2,11 +2,12 @@
   "name": "three-fisheye",
   "version": "0.0.1",
   "scripts": {
-    "setup": "npm install -g http-server; mkdir dist src",
+    "setup": "npm install -g http-server; mkdir dist src lib",
     "init": "npm run update; npm run build",
     "update": "npm update",
     "build": "npm run clean && browserify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify",
     "start": "http-server -s &   watchify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify -v",
+    "babel": "babel src --out-dir lib --presets es2015 --plugins babel-plugin-transform-flow-strip-types",
     "stop": "killall -- node",
     "check": "flow check",
     "lint": "eslint ./src",
@@ -14,6 +15,7 @@
     "reset": "rm -rf node_modules"
   },
   "devDependencies": {
+    "babel-cli": "^6.16.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-preset-es2015": "^6.16.0",
     "babelify": "^7.3.0",
@@ -31,5 +33,5 @@
     "three-orbitcontrols": "^1.1.2",
     "three-trackballcontrols": "0.0.5"
   },
-  "main": "src/index.js"
+  "main": "lib/index.js"
 }

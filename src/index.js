@@ -231,17 +231,17 @@ export function _main(){
   const webm = "2016-10-18-123529.webm";
   Promise.all([
     // カメラをひとつ選択
-      //create_camera("perspective"),
-      create_camera("orthographic"),
+      create_camera("perspective"),
+      //create_camera("orthographic"),
     // 空をひとつ選択
       load_skybox_texture('textures/cube/Park3Med/').then(createSkyboxMesh),            // 夜の住宅街
       //load_skybox_texture('textures/cube/SwedishRoyalCastle/').then(createSkyboxMesh), // 夜のお城
       //load_skybox_texture('textures/cube/skybox/').then(createSkyboxMesh),             // 空
     // 魚眼素材と表示方法をひとつ選択
-      //load_fisheye_image_canvas_texture(src).then(createFisheyeMesh),     // 魚眼静止画 → 天球
+      load_fisheye_image_canvas_texture(src).then(createFisheyeMesh),     // 魚眼静止画 → 天球
       //load_fisheye_image_canvas_texture(src).then(createPanoramaMesh(800)),// 魚眼静止画 → パノラマ
       //load_fisheye_video_canvas_texture(webm).then(createFisheyeMesh),      // 魚眼動画 → 天球
-      load_fisheye_video_canvas_texture(webm).then(createPanoramaMesh(800)) // 魚眼動画 → パノラマ
+      //load_fisheye_video_canvas_texture(webm).then(createPanoramaMesh(800)) // 魚眼動画 → パノラマ
   ]).then(([camera, skybox, mesh])=>{
     // 画角初期化
     updateAngleOfView(camera, renderer, mesh);
