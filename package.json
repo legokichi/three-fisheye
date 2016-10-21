@@ -1,6 +1,6 @@
 {
   "name": "three-fisheye",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "setup": "npm install -g http-server; mkdir dist src lib",
     "init": "npm run update; npm run build",

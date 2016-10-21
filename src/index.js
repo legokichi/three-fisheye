@@ -133,12 +133,12 @@ export function createFisheyeMesh(fisheye_texture){ // 正方形テクスチャ�
   return 完全な白い球体;
 }
 
-export function createPanoramaMesh(panorama_width, R1_ratio=0, R2_ratio=1){
-  //const panorama_width = 400: パノラマ板ポリの空間上の横幅
+export function createPanoramaMesh(panorama_width=0, R1_ratio=0, R2_ratio=1){
+  //const panorama_width = 400; パノラマ板ポリの空間上の横幅、デフォルトはR2の円周の長さ
   //const R1_ratio = 0; // 扇型の下弦 0~1
   //const R2_ratio = 1; // 扇型の上弦 0~1 下弦 < 上弦
   return function _createPanoramaMesh(fisheye_texture){ // 正方形テクスチャを仮定
-    const h_per_w_ratio = (()=>{
+    const {width, height} = (()=>{
       // fisheye -> panorama のパノラマのw/hアスペクト比を計算
       const {width, height} = fisheye_texture.image;
       const [Hs, Ws] = [width, height]; // fisheye 画像短径
@@ -146,8 +146,13 @@ export function createPanoramaMesh(panorama_width, R1_ratio=0, R2_ratio=1){
       const R = Hs/2; // 中心座標からの半径
       const [R1, R2] = [R*R1_ratio, R*R2_ratio]; // fisheye から ドーナッツ状に切り取る領域を決める半径二つ
       const [Wd, Hd] = [(R2 + R1)*Math.PI, R2 - R1] // ドーナッツ状に切り取った領域を短径に変換した大きさ
-      return Hd/Wd;
+      return {height:Hd, width:Wd};
     })();
+    const h_per_w_ratio = height/width;
+    // panorama_width の デフォルト値設定
+    if(panorama_width < 0){
+      panorama_width = width;
+    }
     const モノリス = new THREE.PlaneGeometry(panorama_width, panorama_width*h_per_w_ratio, 32, 32);
     const {vertices, faces, faceVertexUvs} = モノリス;
     // UVを扇型に変換
