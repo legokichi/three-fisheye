@@ -150,7 +150,7 @@ export function createPanoramaMesh(panorama_width=0, R1_ratio=0, R2_ratio=1){
     })();
     const h_per_w_ratio = height/width;
     // panorama_width の デフォルト値設定
-    if(panorama_width < 0){
+    if(panorama_width <= 0){
       panorama_width = width;
     }
     const モノリス = new THREE.PlaneGeometry(panorama_width, panorama_width*h_per_w_ratio, 32, 32);
