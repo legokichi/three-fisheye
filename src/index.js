@@ -133,10 +133,11 @@ export function createFisheyeMesh(fisheye_texture){ // 正方形テクスチャ�
   return 完全な白い球体;
 }
 
-export function createPanoramaMesh(panorama_width){// パノラマ板ポリの空間上の横幅
+export function createPanoramaMesh(panorama_width, R1_ratio=0, R2_ratio=1){
+  //const panorama_width = 400: パノラマ板ポリの空間上の横幅
+  //const R1_ratio = 0; // 扇型の下弦 0~1
+  //const R2_ratio = 1; // 扇型の上弦 0~1 下弦 < 上弦
   return function _createPanoramaMesh(fisheye_texture){ // 正方形テクスチャを仮定
-    const R1_ratio = 0; // 扇型の下弦 0~1
-    const R2_ratio = 1; // 扇型の上弦 0~1 下弦 < 上弦
     const h_per_w_ratio = (()=>{
       // fisheye -> panorama のパノラマのw/hアスペクト比を計算
       const {width, height} = fisheye_texture.image;
@@ -211,6 +212,20 @@ export function updateAngleOfView(camera, renderer, mesh){
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
   }
+}
+
+export function recorder(canvas){
+  // 録画準備
+  const stream = canvas.captureStream(30); // fps
+  const recorder = new MediaRecorder(stream, {mimeType: 'video/webm; codecs="vp8, opus"'});
+  let chunks = [];
+  recorder.ondataavailable = (ev)=>{ chunks.push(ev.data); };
+  function getBlob(){
+    const blob = new Blob(chunks, { 'type' : 'video/webm' });
+    chunks = [];
+    return blob;
+  }
+  return { stream, recorder, chunks, getBlob };
 }
 
 export function _main(){

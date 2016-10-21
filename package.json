@@ -1,17 +1,17 @@
 {
   "name": "three-fisheye",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "setup": "npm install -g http-server; mkdir dist src lib",
     "init": "npm run update; npm run build",
     "update": "npm update",
-    "build": "npm run clean && browserify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify",
-    "start": "http-server -s &   watchify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify -v",
+    "build": "npm run clean && npm run babel && browserify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify",
+    "start": "http-server -s &                    watchify src/index.js --standalone ThreeFisheye -o dist/index.js -t [ babelify --presets [ es2015 ] --plugins [ babel-plugin-transform-flow-strip-types ] ] -t espowerify -v",
     "babel": "babel src --out-dir lib --presets es2015 --plugins babel-plugin-transform-flow-strip-types",
     "stop": "killall -- node",
     "check": "flow check",
     "lint": "eslint ./src",
-    "clean": "rm -rf dist/*",
+    "clean": "rm -rf lib/* dist/*",
     "reset": "rm -rf node_modules"
   },
   "devDependencies": {
