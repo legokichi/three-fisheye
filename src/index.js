@@ -45,24 +45,24 @@ export function load_skybox_texture(urls){
   });
 }
 
-export function calculate_clip_size(width, height){
+export function calculate_clip_size(width, height, margin=0){
   const min = Math.min(width, height);
   const max = Math.max(width, height);
   for(var i=0; min > Math.pow(2, i); i++); // 2^n の大きさを得る
   let pow = Math.pow(2, i-1);
   const [dx, dy, dw, dh] = [0, 0, pow, pow]; // 縮小先の大きさ
-  const [sx, sy, sw, sh] = width < height ? [0, (max/2)-(min/2), min, min] // ソースのクリッピング領域
-                                          : [(max/2)-(min/2), 0, min, min];
+  const [sx, sy, sw, sh] = width < height ? [0-margin, (max/2)-(min/2)-margin, min+margin*2, min+margin*2] // ソースのクリッピング領域
+                                          : [(max/2)-(min/2)-margin, 0-margin, min+margin*2, min+margin*2];
   console.log(`fisheye size: ${pow}x${pow}`);
   return {sx, sy, sw, sh, dx, dy, dw, dh};
 }
 
-export function load_fisheye_image_canvas_texture(url){
+export function load_fisheye_image_canvas_texture(url, margin=0){
   return load_image(url).then((img)=>{
     const cnv = document.createElement("canvas");
     const ctx = cnv.getContext("2d");
     const {width, height} = img;
-    const {sx, sy, sw, sh, dx, dy, dw, dh} = calculate_clip_size(width, height);
+    const {sx, sy, sw, sh, dx, dy, dw, dh} = calculate_clip_size(width, height, margin);
     const [_dw, _dh] = [2*dw, 2*dh]; // 静止画はアップサイジング
     [cnv.width, cnv.height] = [_dw, _dh];
     ctx.drawImage(img, sx, sy, sw, sh, dx, dy, _dw, _dh);
@@ -72,12 +72,12 @@ export function load_fisheye_image_canvas_texture(url){
   });
 }
 
-export function load_fisheye_video_canvas_texture(url){
+export function load_fisheye_video_canvas_texture(url, margin=0){
   return load_video(url).then((video)=>{
     const cnv = document.createElement("canvas");
     const ctx = cnv.getContext("2d");
     const {videoWidth, videoHeight} = video;
-    const {sx, sy, sw, sh, dx, dy, dw, dh} = calculate_clip_size(videoWidth, videoHeight);
+    const {sx, sy, sw, sh, dx, dy, dw, dh} = calculate_clip_size(videoWidth, videoHeight, margin);
     [cnv.width, cnv.height] = [dw, dh];
     const tex = new THREE.Texture(cnv);
     let paused = false;
@@ -233,6 +233,7 @@ export function recorder(canvas){
   return { stream, recorder, chunks, getBlob };
 }
 
+
 export function _main(){
   const container = document.body;
 
@@ -246,8 +247,8 @@ export function _main(){
   container.appendChild(renderer.domElement);
 
   // 素材ロード
-  // const src = "2016-10-18-123734.jpg";
-  const src = "2016-10-18-16.29.01.png";
+  const src = "2016-10-18-123734.jpg";
+  //const src = "2016-10-18-16.29.01.png";
   const webm = "2016-10-18-123529.webm";
   Promise.all([
     // カメラをひとつ選択
@@ -258,8 +259,8 @@ export function _main(){
       //load_skybox_texture('textures/cube/SwedishRoyalCastle/').then(createSkyboxMesh), // 夜のお城
       //load_skybox_texture('textures/cube/skybox/').then(createSkyboxMesh),             // 空
     // 魚眼素材と表示方法をひとつ選択
-      load_fisheye_image_canvas_texture(src).then(createFisheyeMesh),     // 魚眼静止画 → 天球
-      //load_fisheye_image_canvas_texture(src).then(createPanoramaMesh(800)),// 魚眼静止画 → パノラマ
+      //load_fisheye_image_canvas_texture(src).then(createFisheyeMesh),     // 魚眼静止画 → 天球
+      load_fisheye_image_canvas_texture(src, 200).then(createPanoramaMesh(800)),// 魚眼静止画 → パノラマ
       //load_fisheye_video_canvas_texture(webm).then(createFisheyeMesh),      // 魚眼動画 → 天球
       //load_fisheye_video_canvas_texture(webm).then(createPanoramaMesh(800)) // 魚眼動画 → パノラマ
   ]).then(([camera, skybox, mesh])=>{
