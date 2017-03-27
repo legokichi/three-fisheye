@@ -46,6 +46,7 @@ export function load_skybox_texture(urls){
 }
 
 export function calculate_clip_size(width, height, margin=0){
+  margin = 120;
   const min = Math.min(width, height);
   const max = Math.max(width, height);
   for(var i=0; min > Math.pow(2, i); i++); // 2^n の大きさを得る
@@ -183,22 +184,28 @@ export function createPanoramaMesh(panorama_width=0, R1_ratio=0, R2_ratio=1){
 export function create_camera(type){
   // カメラ初期値
   const camera = type === "orthographic"
-    // 画角, アスペクト比、視程近距離、視程遠距離
-    ? new THREE.OrthographicCamera(window.innerWidth/-2, window.innerWidth/2, window.innerHeight/2, window.innerHeight/-2, 1, 10000)
     // left, right, top, bottom, near, far
-    : new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-  
+    ? new THREE.OrthographicCamera(WINDOW_WIDTH/-2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_HEIGHT/-2, 1, 10000)
+    // 画角, アスペクト比、視程近距離、視程遠距離
+    : new THREE.PerspectiveCamera( 30, WINDOW_WIDTH / WINDOW_HEIGHT, 1, 10000 );
+  console.log(camera)
   camera.position.z = 0.01;
+  window["camera"] = camera;
 
   return camera;
 }
 
+export let WINDOW_WIDTH = window.innerWidth;
+export let WINDOW_HEIGHT = WINDOW_WIDTH/4;
+
 export function updateAngleOfView(camera, renderer, mesh){
+  WINDOW_WIDTH = window.innerWidth;
+  WINDOW_HEIGHT = WINDOW_WIDTH/4;
   if(camera instanceof THREE.PerspectiveCamera){
     // 普通のカメラ
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = WINDOW_WIDTH / WINDOW_HEIGHT;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
   }else if(camera instanceof THREE.OrthographicCamera && mesh instanceof THREE.Mesh && mesh.geometry instanceof THREE.PlaneGeometry){
     // 並行投影 + クリッピング
     const {width, height} = mesh.geometry.parameters;
@@ -210,12 +217,12 @@ export function updateAngleOfView(camera, renderer, mesh){
     renderer.setSize( width, height );
   }else if(camera instanceof THREE.OrthographicCamera){
     // 単純並行投影
-    camera.left = window.innerWidth/-2;
-    camera.right = window.innerWidth/2;
-    camera.top = window.innerHeight/2;
-    camera.bottom = window.innerHeight/-2;
+    camera.left = WINDOW_WIDTH/-2;
+    camera.right = WINDOW_WIDTH/2;
+    camera.top = WINDOW_HEIGHT/2;
+    camera.bottom = WINDOW_HEIGHT/-2;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( WINDOW_WIDTH, WINDOW_HEIGHT );
   }
 }
 
@@ -243,7 +250,7 @@ export function _main(){
 
   const scene = new THREE.Scene();
   const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   container.appendChild(renderer.domElement);
 
   // 素材ロード
@@ -259,8 +266,8 @@ export function _main(){
       //load_skybox_texture('textures/cube/SwedishRoyalCastle/').then(createSkyboxMesh), // 夜のお城
       //load_skybox_texture('textures/cube/skybox/').then(createSkyboxMesh),             // 空
     // 魚眼素材と表示方法をひとつ選択
-      //load_fisheye_image_canvas_texture(src).then(createFisheyeMesh),     // 魚眼静止画 → 天球
-      load_fisheye_image_canvas_texture(src, 200).then(createPanoramaMesh(800)),// 魚眼静止画 → パノラマ
+      load_fisheye_image_canvas_texture(src).then(createFisheyeMesh),     // 魚眼静止画 → 天球
+      //load_fisheye_image_canvas_texture(src, 200).then(createPanoramaMesh(800)),// 魚眼静止画 → パノラマ
       //load_fisheye_video_canvas_texture(webm).then(createFisheyeMesh),      // 魚眼動画 → 天球
       //load_fisheye_video_canvas_texture(webm).then(createPanoramaMesh(800)) // 魚眼動画 → パノラマ
   ]).then(([camera, skybox, mesh])=>{
