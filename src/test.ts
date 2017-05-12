@@ -1,4 +1,4 @@
-import {Fisheye2Perspective} from "./";
+import {Fisheye2Perspective, Fisheye2Equirectangular} from "./";
 import * as dat from "dat-gui";
 
 const QUnit     = <QUnit>require('qunitjs');
@@ -10,7 +10,7 @@ QUnit.config.autostart = true;
 empower(QUnit.assert, formatter(), { destructive: true });
 qunitTap(QUnit, function() { console.log.apply(console, arguments); }, {showSourceOnFailure: false});
 
-QUnit.module("Fisheye2Perspective");
+QUnit.module("Fisheye");
 
 
 QUnit.test("Fisheye2Perspective", async (assert: Assert)=>{
@@ -32,10 +32,9 @@ QUnit.test("Fisheye2Perspective", async (assert: Assert)=>{
   });
 
   video.autoplay = true;
-  window["video"] = video;
 
   const cam = new Fisheye2Perspective();
-  window["cam"] = cam;
+
   cam.src = video;
   cam.canvasSize = {width: 600, height: 400};
   cam.cameraPose = {pitch: Math.PI/4, yaw: 0};
@@ -86,6 +85,28 @@ QUnit.test("Fisheye2Perspective", async (assert: Assert)=>{
 });
 
 
+QUnit.test("Fisheye2Equirectangular", async (assert: Assert)=>{
+  const video = document.createElement("video");
+  video.src = "./ec2e5847-b502-484c-b898-b8e2955f4545.webm";
+
+  await new Promise((resolve, reject)=>{
+    video.addEventListener("loadeddata", resolve, <any>{once: true});
+    video.addEventListener("error", reject, <any>{once: true});
+  });
+  const cam = new Fisheye2Equirectangular();
+  window["cam"] = cam;
+  cam.src = video;
+  //cam.canvasSize = {width: 600, height: 400};
+  cam.fisheyeRegion = {centerX: 1259, centerY: 887, radius: 879};
+  document.body.appendChild(cam.canvas);
+
+  cam.render();
+
+  assert.ok(true);
+});
+
+
 function sleep(ms: number): Promise<void>{
   return new Promise<void>((resolve)=> setTimeout(resolve, ms));
 }
+
