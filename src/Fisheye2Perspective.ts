@@ -1,10 +1,9 @@
 import * as THREE from "three";
-import {Fisheye} from "./Fisheye";
+import {Fisheye, Radian} from "./Fisheye";
 
 
 export interface CameraConfig { region: FishEyeRegion, direction: DirectionOfView, zoom: number }
 
-export type Radian    = number;
 export type Pixel     = number;
 
 /**

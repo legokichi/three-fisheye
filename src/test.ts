@@ -1,4 +1,5 @@
-import {Fisheye2Perspective, Fisheye2Equirectangular} from "./";
+import {Fisheye2Perspective, Fisheye2Equirectangular, mercator2Sphere, sphere2Mercator, sphere2Fisheye, fisheye2Sphere} from "./";
+
 import * as dat from "dat-gui";
 
 const QUnit     = <QUnit>require('qunitjs');
@@ -11,6 +12,17 @@ empower(QUnit.assert, formatter(), { destructive: true });
 qunitTap(QUnit, function() { console.log.apply(console, arguments); }, {showSourceOnFailure: false});
 
 QUnit.module("Fisheye");
+
+QUnit.test("mercator2Sphere, sphere2Mercator", async (assert: Assert)=>{
+  for(let x=0; x<=1; x+=0.1){
+    for(let y=0; y<=1; y+=0.1){
+      const [a, b] = mercator2Sphere(x, y);
+      const [_x, _y] = sphere2Mercator(a, b);
+      assert.ok(x-0.00000001 <= _x && _x <= x+0.00000001);
+      assert.ok(y-0.00000001 <= _y && _y <= y+0.00000001);
+    }
+  }
+});
 
 
 QUnit.test("Fisheye2Perspective", async (assert: Assert)=>{

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {Fisheye} from "./Fisheye";    
+import {Fisheye, mercator2Sphere, sphere2Fisheye} from "./Fisheye";    
 /**
  * Equirectangular Cylindrical Mercator
 * http://wiki.panotools.org/Projections
@@ -94,17 +94,18 @@ export function createPanoramaMesh(fisheye_texture, panorama_width=0, R1_ratio=0
   const [Wd, Hd] = [1, 1] // ドーナッツ状に切り取った領域を短径に変換した大きさ
   faceVertexUvs[0] = faceVertexUvs[0].map((pt2Dx3)=>{
     return pt2Dx3.map(({x, y})=>{
+      const [xD, yD] = [x, y];
       // x, y ∈ [0, 1] は正方形に正規化された PlaneGeometry 上のUV座標
       // たとえば (x,y) = (0, 0) は PlaneGeometry 左上座標。
       // この(x,y)座標が表示すべき(魚眼)テクスチャ座標を返せば良い。
       // 今回はテクスチャが魚眼画像なので UV座標(0,0) が表示すべきテクスチャ座標は オイラー座標で (0,0)、直交座標では(cx,cy)になる。
       // PlaneGeometry 上のあるピクセルはテクスチャ上のどの位置を表示(写像)しなければいけないかを考える。
-      const [xD, yD] = [x, y];
       const r = (yD/Hd)*(R2-R1) + R1;
       const theta = (xD/Wd)*2.0*Math.PI;
       const xS = Cx + r*Math.sin(theta);
       const yS = Cy + r*Math.cos(theta);
       return new THREE.Vector2(xS, yS);
+      
     });
   });
   const mat = new THREE.MeshBasicMaterial( { color: 0xFFFFFF, map: fisheye_texture } );

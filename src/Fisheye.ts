@@ -264,17 +264,18 @@ export function createSkyboxMesh(skybox_texture: THREE.CubeTexture): THREE.Mesh 
  * @param latitude - 緯度 rad
  * @return [x, y]
  */
-export function sphere2Mercator(longitude: number, latitude: number): [number, number]{
+export function sphere2Mercator(longitude: Radian, latitude: Radian): [number, number]{
   const x = longitude;
   const y = Math.log(Math.tan(Math.PI/4 + latitude/2))
   return [x, y];
 }
 /**
+ * 半径 1 の球体を想定
  * @param x
  * @param y
  * @return [longitude, latitude]
  */
-export function mercator2Sphere(x: number, y: number): [number, number]{
+export function mercator2Sphere(x: number, y: number): [Radian, Radian]{
   const longitude = x;
   const latitude = Math.asin(Math.tanh(y));
   return [longitude, latitude];
@@ -282,26 +283,41 @@ export function mercator2Sphere(x: number, y: number): [number, number]{
 
 /**
  * 縦横 2 の正方形な魚眼画像から
- * 半径 1 の球体へ射影(up)
+ * 半径 1 の上半球極座標へ射影(up)
+ * @param x ∈ [-1, 1]
+ * @param y ∈ [-1, 1]
+ * @return [longitude, latitude] - Spherical coordinates
  */
-export function fisheye2Sphere(x: number, y: number): [number, number] | null {
+export function fisheye2Sphere(x: number, y: number, r=1): [Radian, Radian] | null {
   const [cx, cy] = [1, 1];
   [x, y] = [x-cx, y-cy];
   const [theta, l] = [Math.atan2(y, x), Math.sqrt(x*x + y*y)]; // Cartesian to Euler
   if(l >= 1){ return null; }
-  const r = 1;
   const [longitude, latitude] = [theta, Math.acos(l/r)];
   return [longitude, latitude];
 }
 
 /**
- * 半径 1 の球面座標から
- * 縦横 2 の正方形座標へ射影(down)
+ * 半径 1 の上半球極座標から
+ * 縦横 2 の原点を中心とした正方形座標へ射影(down)
+ * @param longitude - Spherical coordinates
+ * @param latitude - Spherical coordinates
+ * @return [x, y] ∈ [-1, 1]
  */
-export function sphere2Fisheye(longitude: number, latitude: number): [number, number]{
-  const r = 1;
+export function sphere2Fisheye(longitude: Radian, latitude: Radian, r=1): [number, number]{
   const [theta, l] = [longitude, r*Math.cos(latitude)];
   const [x, y] = [l*Math.cos(theta), l*Math.sin(theta)];
-  const [cx, cy] = [1, 1];
-  return [x+cx, y+cy];
+  return [x, y];
 }
+
+/**
+ * @param alpha - 右手座標系 z 軸こっち向いて左まわり Euler angles
+ * @param beta - 右手座標系 x 軸こっち向いて左まわり Euler angles
+ * @param gamma - 右手座標系 y 軸こっち向いて左まわり Euler angles
+ */
+export function rotate(alpha: Radian, beta: Radian, gamma: Radian){
+
+}
+export type Radian    = number;
+
+
