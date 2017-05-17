@@ -1,5 +1,11 @@
 # three-fisheye
 
+# install
+
+```
+npm install three-fisheye --save
+```
+
 # example
 
 see `src/test.ts` and `src/example_perspective.ts`
