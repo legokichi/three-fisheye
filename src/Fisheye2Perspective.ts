@@ -60,7 +60,7 @@ export class Fisheye2Perspective extends Fisheye<THREE.PerspectiveCamera> {
 
   
   /** load 前 === src 変更前に書き換えてね */
-  protected mesh_num: number;
+  public mesh_num: number;
   private meshes: THREE.Mesh[];
   private texis: THREE.Texture[];
   private readonly local: THREE.Object3D;

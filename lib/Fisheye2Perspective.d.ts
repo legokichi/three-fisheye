@@ -51,7 +51,7 @@ export declare class Fisheye2Perspective extends Fisheye<THREE.PerspectiveCamera
     readonly sep_mode: boolean;
     readonly collisionSphere: THREE.Mesh;
     /** load 前 === src 変更前に書き換えてね */
-    protected mesh_num: number;
+    mesh_num: number;
     private meshes;
     private texis;
     private readonly local;
