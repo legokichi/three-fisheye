@@ -15,6 +15,7 @@
     "browserify": "browserify lib/index.js --standalone Fisheye -o dist/Fisheye.js",
     "watchify": "watchify lib/index.js --standalone Fisheye -o dist/Fisheye.js -v",
     "test": "tsc; espower lib/test.js > lib/test.tmp; mv -f lib/test.tmp lib/test.js; browserify lib/test.js -o test/test.js",
+    "example": "tsc; browserify lib/example_perspective.js -o test/example_perspective.js",
     "examples": "tsc; for file in `find lib -name 'example_*.js' -type f -printf '%f\\n'`; do browserify lib/$file -o test/$file; done",
     "check": "tsc -w --noEmit -p ./",
     "lint": "tslint -c ./tslint.json --project ./tsconfig.json --type-check",
