@@ -1,0 +1,7 @@
+dist/
+node_modules/
+test/
+*.webm
+*.log
+*.jpg
+*.png
