@@ -6,10 +6,6 @@
 npm install three-fisheye --save
 ```
 
-# example
-
-see `src/test.ts` and `src/example_perspective.ts`
-
 # features
 
 ## original Fisheye
@@ -23,6 +19,48 @@ see `src/test.ts` and `src/example_perspective.ts`
 ## Equirectangular
 
 ![](https://github.com/legokichi/three-fisheye/raw/master/test/WellsCathedral-28F12wyrdlight.equirectangular.png?raw=true)
+
+# stable API
+
+```ts
+abstract class Fisheye{
+  /** source */
+  src: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | null;
+
+  /** ajast center */
+  centerX: number;
+  centerY: number;
+  radius: number;
+
+  /** GL canvas */
+  canvas: HTMLCanvasElement;
+
+  /** canvas size */
+  width: number;
+  height: number;
+
+  destructor(): void;
+  render(): void;
+}
+
+class Fisheye2Perspective extends Fisheye {
+  /** direction of view */
+  pitch: number;
+  yaw: number;
+  zoom: number;
+  constructor();
+  drag(type: "start" | "move", offsetX: number, offsetY: number): any;
+}
+
+class Fisheye2Equirectangular extends Fisheye{
+  constructor();
+}
+```
+
+# usage
+
+see `src/test.ts` and `src/example_perspective.ts`
+
 
 # develop
 
