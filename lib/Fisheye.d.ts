@@ -123,3 +123,7 @@ export declare function sphere2Fisheye(longitude: Radian, latitude: Radian, r?: 
  */
 export declare function rotate(alpha: Radian, beta: Radian, gamma: Radian): void;
 export declare type Radian = number;
+/**
+ * 円筒テクスチャを魚眼画像に変換するときに使う。
+ */
+export declare function fisheye2equirectangular(x: number, y: number): [number, number];

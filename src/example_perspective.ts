@@ -1,4 +1,4 @@
-import {Fisheye2Perspective, Fisheye2Equirectangular} from "./";
+import {Fisheye2Perspective, Fisheye2Equirectangular, Equirectangular2Fisheye} from "./";
 import * as dat from "dat-gui";
 
 async function main(){
@@ -30,8 +30,8 @@ async function main(){
   //window.addEventListener("resize", (ev)=>{ cam.canvasSize = {width: window.innerWidth, height: window.innerHeight}; cam.render(); });
 
   cam.render();
-  cam.texctx.canvas.style.border = "1px solid black";
-  cam.texctx.canvas.style.width = "300px";
+  //cam.texctx.canvas.style.border = "1px solid black";
+  //cam.texctx.canvas.style.width = "300px";
   document.body.appendChild(cam.canvas);
   document.body.appendChild(cam.texctx.canvas);
 
@@ -40,11 +40,18 @@ async function main(){
   window["cam2"] = cam2;
   cam2.src = img;
   cam2.fisheyeRegion = cam.fisheyeRegion;
-  cam2.width/=4;
-  cam2.height/=4;
+  //cam2.width/=4;
+  //cam2.height/=4;
   cam2.render();
 
   document.body.appendChild(cam2.canvas);
+
+
+  const cam3 = new Equirectangular2Fisheye();
+  window["cam3"] = cam3;
+  cam3.src = cam2.canvas;
+  cam3.render();
+  document.body.appendChild(cam3.canvas);
 
   // dat-GUI
   const gui = new dat.GUI();

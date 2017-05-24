@@ -1,4 +1,4 @@
-import {Fisheye2Perspective, Fisheye2Equirectangular, mercator2Sphere, sphere2Mercator, sphere2Fisheye, fisheye2Sphere} from "./";
+import {Equirectangular2Fisheye, Fisheye2Perspective, Fisheye2Equirectangular, mercator2Sphere, sphere2Mercator, sphere2Fisheye, fisheye2Sphere, createFisheyeMesh, load_skybox_texture, createSkyboxMesh} from "./";
 
 import * as dat from "dat-gui";
 
@@ -113,6 +113,54 @@ QUnit.test("Fisheye2Equirectangular", async (assert: Assert)=>{
   document.body.appendChild(cam.canvas);
 
   cam.render();
+
+  assert.ok(true);
+});
+
+import * as THREE from "three";
+QUnit.test("Equirectangular2Fisheye", async (assert: Assert)=>{
+  const img = new Image();
+  img.src = "./WellsCathedral-28F12wyrdlight.equirectangular.png";
+  await new Promise((resolve, reject)=>{
+    img.addEventListener("load", resolve, <any>{once: true});
+    img.addEventListener("error", reject, <any>{once: true});
+  });
+  const skyboxtex = await load_skybox_texture('../textures/cube/Park3Med/');
+  const skybox = await createSkyboxMesh(skyboxtex);
+
+  const renderer = new THREE.WebGLRenderer();
+  const scene = new THREE.Scene();
+  
+  const tex = new THREE.Texture(img);
+  tex.needsUpdate = true;
+  const mesh = createFisheyeMesh(tex);
+  mesh.rotation.x = Math.PI; // 北緯側の半球になるように回転
+  mesh.rotation.y = Math.PI; // こっちむいてベイビー
+  mesh.position.z = -800; // カメラからの距離
+  const {width, height} = (<THREE.PlaneGeometry>mesh.geometry).parameters;
+  const camera = new THREE.OrthographicCamera(100/-2, 100/2, 100/2, 100/-2, 1, 10000);
+  //const camera = new THREE.PerspectiveCamera( 30, 4 / 3, 1, 10000 );
+  camera.position.z = 0.01;
+  scene.add(camera);
+  scene.add(mesh);
+  scene.add(skybox);
+  
+  //renderer.setSize( 400, 300 );
+
+  renderer.setSize( width, height );
+  camera.left = width/-2;
+  camera.right = width/2;
+  camera.top = height/2;
+  camera.bottom = height/-2;
+  
+  camera.updateProjectionMatrix();
+
+  document.body.appendChild(renderer.domElement);
+
+  tex.needsUpdate = true;
+  camera.updateProjectionMatrix();
+  renderer.render(scene, camera);
+  
 
   assert.ok(true);
 });

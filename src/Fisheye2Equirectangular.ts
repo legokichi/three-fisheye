@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {Fisheye, mercator2Sphere, sphere2Fisheye} from "./Fisheye";    
+import {Fisheye, mercator2Sphere, sphere2Fisheye} from "./Fisheye";
 /**
  * Equirectangular Cylindrical Mercator
 * http://wiki.panotools.org/Projections

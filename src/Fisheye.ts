@@ -320,4 +320,22 @@ export function rotate(alpha: Radian, beta: Radian, gamma: Radian){
 }
 export type Radian    = number;
 
-
+/**
+ * 円筒テクスチャを魚眼画像に変換するときに使う。
+ */
+export function fisheye2equirectangular(x: number, y: number): [number, number] {
+  const [w, h] = [1, 1];
+  const r = 1/2;
+  console.assert(0 <= x && x <= 1);
+  console.assert(0 <= y && y <= 1);
+  x -= r;
+  y -= r;
+  y = y;
+  const [theta, l] = [Math.atan2(y, x), Math.sqrt(x*x + y*y)]; // Cartesian to Euler
+  let [s, t] = [w*(theta/(2*Math.PI)), h*(l/r)];
+  console.assert(-0.5 <= s && s <= 0.5);
+  console.assert(0 <= t && t <= Math.sqrt(2));
+  s += 0.5;
+  t = (1 - t);
+  return [s, t];
+}
