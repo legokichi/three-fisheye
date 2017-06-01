@@ -145,6 +145,7 @@ export abstract class Fisheye<Camera extends THREE.Camera>{
     // 現在のレンダラを現在のピクセルサイズに最適化する
     this.renderer.setSize(size.width, size.height);
     if(this.camera instanceof THREE.PerspectiveCamera){
+      this.camera.aspect = size.width/size.height;
       this.camera.updateProjectionMatrix();
     }
   }
