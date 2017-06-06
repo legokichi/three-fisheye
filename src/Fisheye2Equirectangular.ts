@@ -84,8 +84,8 @@ export function createPanoramaMesh(fisheye_texture, panorama_width=0, R1_ratio=0
   if(panorama_width <= 0){
     panorama_width = width;
   }
-  const モノリス = new THREE.PlaneGeometry(panorama_width, panorama_width*h_per_w_ratio, 32, 32);
-  const {vertices, faces, faceVertexUvs} = モノリス;
+  const plane = new THREE.PlaneGeometry(panorama_width, panorama_width*h_per_w_ratio, 32, 32);
+  const {vertices, faces, faceVertexUvs} = plane;
   // UVを扇型に変換
   const [Hs, Ws] = [1, 1]; // UV のサイズ
   const [Cx, Cy] = [Ws/2, Hs/2]; // UV の中心座標
@@ -109,11 +109,11 @@ export function createPanoramaMesh(fisheye_texture, panorama_width=0, R1_ratio=0
     });
   });
   const mat = new THREE.MeshBasicMaterial( { color: 0xFFFFFF, map: fisheye_texture } );
-  const 漆黒のモノリス = new THREE.Mesh(モノリス, mat);
-  漆黒のモノリス.rotation.x = Math.PI; // 北緯側の半球になるように回転
-  漆黒のモノリス.rotation.y = Math.PI; // こっちむいてベイビー
-  漆黒のモノリス.position.z = -panorama_width; // カメラからの距離
-  return 漆黒のモノリス;
+  const mesh = new THREE.Mesh(plane, mat);
+  mesh.rotation.x = Math.PI; // 北緯側の半球になるように回転
+  mesh.rotation.y = Math.PI; // こっちむいてベイビー
+  mesh.position.z = -panorama_width; // カメラからの距離
+  return mesh;
 }
 
 
