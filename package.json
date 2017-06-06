@@ -1,6 +1,6 @@
 {
   "name": "three-fisheye",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "fisheye image to sphere or panorama projection",
   "scripts": {
     "setup": "npm install -g http-server;",
