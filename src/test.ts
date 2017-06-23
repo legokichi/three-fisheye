@@ -2,10 +2,10 @@ import {Equirectangular2Fisheye, Fisheye2Perspective, Fisheye2Equirectangular, m
 
 import * as dat from "dat-gui";
 
-const QUnit     = <QUnit>require('qunitjs');
-const empower   = <Function>require('empower');
-const formatter = <Function>require('power-assert-formatter');
-const qunitTap  = <Function>require("qunit-tap");
+import QUnit     = require('qunitjs');
+import empower   = require('empower');
+import formatter = require('power-assert-formatter');
+import qunitTap  = require("qunit-tap");
 
 QUnit.config.autostart = true;
 empower(QUnit.assert, formatter(), { destructive: true });

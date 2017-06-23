@@ -1,5 +1,6 @@
 import * as THREE from "three";
-const OrbitControls: any = require('three-orbit-controls')(THREE);
+import _OrbitControls = require('three-orbit-controls')
+const OrbitControls = _OrbitControls(THREE);
 
 export abstract class Fisheye<Camera extends THREE.Camera>{
   /**

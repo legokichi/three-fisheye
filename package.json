@@ -1,6 +1,6 @@
 {
   "name": "three-fisheye",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "fisheye image to sphere or panorama projection",
   "scripts": {
     "setup": "npm install -g http-server;",
@@ -34,11 +34,10 @@
   "homepage": "https://github.com/legokichi/threejs-fisheye#readme",
   "dependencies": {
     "three": "^0.83.0",
-    "@types/three": "0.0.28",
-    "@types/node": "0.0.2",
     "three-orbit-controls": "^82.1.0"
   },
   "devDependencies": {
+    "@types/three": "0.0.28",
     "dat-gui": "^0.5.0",
     "@types/dat-gui": "^0.6.2",
     "empower": "^1.2.1",
@@ -47,13 +46,11 @@
     "power-assert-formatter": "^1.4.1",
     "qunit-tap": "^1.5.1",
     "qunitjs": "^2.0.1",
-    "@types/node": "0.0.2",
     "browserify": "^13.1.0",
     "tslint": "^3.15.1",
     "typedoc": "^0.5.3",
     "typescript": "^2.0.3",
     "watchify": "^3.7.0",
-    "@types/power-assert-formatter": "^1.4.28",
     "@types/qunit": "^2.0.31"
   },
   "main": "./lib/index.js",
